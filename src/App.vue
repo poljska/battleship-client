@@ -1,28 +1,27 @@
 <template>
   <div id="app">
+    <div class="title-bar">
+      <h1>Battle ship</h1>
+    </div>
     <router-view />
   </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+body {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: blue;
+  background-color: lightblue;
+  height: 300px;
+  margin: 0px;
+  font-size: 100px;
 }
 </style>

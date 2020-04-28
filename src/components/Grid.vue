@@ -46,7 +46,7 @@ export default {
 <style scoped>
 .cell {
   display: block;
-  border: 1px solid blue;
+  border: 0.5px dashed blue;
   background-color: lightblue;
   flex-grow: 1;
 }
