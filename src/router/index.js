@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import JoinGame from "@/views/JoinGame.vue";
+import Game from "@/views/Game.vue";
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes = [
     path: "/join",
     name: "Join Game",
     component: JoinGame
+  },
+  {
+    path: "/game",
+    name: "Game",
+    component: Game
   }
 ];
 
