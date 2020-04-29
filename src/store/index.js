@@ -25,7 +25,7 @@ export default new Vuex.Store({
   },
   actions: {
     createNewGame({ commit, dispatch }) {
-      let request = new XMLHttpRequest();
+      const request = new XMLHttpRequest();
       request.open("POST", "https://battleship-server-php.herokuapp.com/games");
       request.addEventListener("readystatechange", () => {
         if (
@@ -40,7 +40,7 @@ export default new Vuex.Store({
       request.send(null);
     },
     joinGame({ commit, dispatch }, game_id) {
-      let request = new XMLHttpRequest();
+      const request = new XMLHttpRequest();
       request.open(
         "POST",
         "https://battleship-server-php.herokuapp.com/games/" + game_id + "/join"
@@ -59,7 +59,7 @@ export default new Vuex.Store({
       request.send();
     },
     getGameInfo({ state, commit }) {
-      let request = new XMLHttpRequest();
+      const request = new XMLHttpRequest();
       request.open(
         "GET",
         "https://battleship-server-php.herokuapp.com/games/" +
@@ -77,6 +77,32 @@ export default new Vuex.Store({
         }
       });
       request.send();
+    },
+    fire({ state, commit }, row, col) {
+      const request = new XMLHttpRequest();
+      request.open(
+        "PATCH",
+        "https://battleship-server-php.herokuapp.com/games/" +
+          state.game.game_id +
+          "/fire"
+      );
+      request.setRequestHeader("X-Auth", state.authToken);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.addEventListener("readystatechange", () => {
+        if (
+          request.readyState == XMLHttpRequest.DONE &&
+          request.status == 200
+        ) {
+          let { shot, status } = JSON.parse(request.responseText);
+          commit("addShot", shot);
+          if (status.status === "InProgress") {
+            // Call wait for next turn function
+          } else if (status.status === "Finished") {
+            // Call end Game function
+          }
+        }
+      });
+      request.send("[" + row + "," + col + "]");
     }
   },
   modules: {}
