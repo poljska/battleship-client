@@ -33,7 +33,6 @@ export default new Vuex.Store({
     },
     joinGame({ commit }, game_id) {
       let request = new XMLHttpRequest();
-      console.debug(game_id);
       request.open(
         "POST",
         "https://battleship-server-php.herokuapp.com/games/" + game_id + "/join"
