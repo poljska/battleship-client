@@ -1,13 +1,8 @@
 <template>
-  <div class="corp">
-    <header>
-      <h1>BATTLESHIP</h1>
-    </header>
-    <main>
-      <v-btn color="#006daa" @click="onNewGame" tile x-large>New Game</v-btn>
-      <v-btn color="#006daa" to="/join" tile x-large>Join Game</v-btn>
-    </main>
-  </div>
+  <main>
+    <v-btn color="#006daa" @click="onNewGame" tile x-large>New Game</v-btn>
+    <v-btn color="#006daa" to="/join" tile x-large>Join Game</v-btn>
+  </main>
 </template>
 
 <script>
@@ -23,35 +18,11 @@ export default {
 </script>
 
 <style scoped>
-.corp {
-  display: flex;
-  flex-direction: column;
-  align-content: stretch;
-  justify-content: stretch;
-  width: 100%;
-}
-
 main {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   flex: 3;
-}
-
-header {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  flex: 2;
-  background: #0353a4;
-}
-
-h1 {
-  font-size: 10em;
-  font-family: Helvetica, sans-serif;
-  color: #061a40;
-  flex: 0;
-  margin: 4%;
 }
 </style>
