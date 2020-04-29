@@ -4,19 +4,28 @@
       <h1>BATTLESHIP</h1>
     </header>
     <main>
-      <v-btn color="#006daa" @click="onNewGame" tile x-large>New Game</v-btn>
-      <v-btn color="#006daa" to="/join" tile x-large>Join Game</v-btn>
+      <v-text-field
+        color="#006daa"
+        class="flex-grow-0"
+        v-model="gameId"
+        placeholder="Game ID"
+        outlined
+      />
+      <v-btn color="#006daa" @click="onJoin" tile x-large>Join</v-btn>
     </main>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Home",
-  components: {},
+  data() {
+    return {
+      gameId: ""
+    };
+  },
   methods: {
-    onNewGame() {
-      this.$store.dispatch("createNewGame");
+    onJoin() {
+      console.debug("Join game: " + this.gameId);
     }
   }
 };
@@ -34,7 +43,7 @@ export default {
 main {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   flex: 3;
 }
@@ -53,5 +62,9 @@ h1 {
   color: #061a40;
   flex: 0;
   margin: 4%;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
 }
 </style>

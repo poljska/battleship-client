@@ -1,27 +1,23 @@
 <template>
   <div id="app">
-    <div class="title-bar">
-      <h1>Battle ship</h1>
-    </div>
     <router-view />
   </div>
 </template>
 
 <style>
-body {
-  margin: 0px;
-  padding: 0px;
-  height: 100%;
-  width: 100%;
-}
-.title-bar {
+#app {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: blue;
-  background-color: lightblue;
-  height: 300px;
-  margin: 0px;
-  font-size: 100px;
+  height: 100vh;
+  width: 100vw;
+  background-color: #b9d6f2;
+  color: #061a40;
 }
+
+/* HEX 
+  $color1: #b9d6f2ff;
+  $color2: #061a40ff;
+  $color3: #0353a4ff;
+  $color4: #006daaff;
+  $color5: #003559ff;
+*/
 </style>
