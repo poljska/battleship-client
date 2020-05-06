@@ -1,14 +1,15 @@
 <template>
   <div class="grid">
-    <div v-for="row in grid" :key="row.index" class="row">
+    <div v-for="row in grid" :key="row.index" class="line">
       <div
         v-for="cell in row.cells"
         :key="cell.index"
         class="cell"
         @click="onClick(row.index, cell.index)"
       >
-        <div :v-if="cell.striked && cell.boat">Hit</div>
-        <div :v-else-if="cell.striked === 'missed'">miss</div>
+        <div v-if="cell.striked === 'hit'">Hit</div>
+        <div v-else-if="cell.striked === 'missed'">miss</div>
+        <div v-else>?</div>
       </div>
     </div>
   </div>
@@ -37,7 +38,7 @@ export default {
   methods: {
     onClick(row, cell) {
       console.log([row, cell]);
-      this.grid[row][cell].striked("hit");
+      this.grid[row].cells[cell].striked = "hit";
     }
   }
 };
@@ -45,19 +46,21 @@ export default {
 
 <style scoped>
 .cell {
-  display: block;
-  border: 0.5px dashed #061a40;
-  background-color: #0353a4;
-  flex-grow: 1;
-}
-.row {
   display: flex;
-  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  border: 0.5px dashed #061a40;
+  flex: 1;
+}
+.line {
+  display: flex;
+  flex: 1;
 }
 .grid {
   display: flex;
   flex-direction: column;
   height: 500px;
   width: 500px;
+  background-color: #0353a4;
 }
 </style>
