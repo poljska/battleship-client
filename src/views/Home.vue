@@ -12,6 +12,7 @@ export default {
   methods: {
     onNewGame() {
       this.$store.dispatch("createNewGame");
+      this.$router.push("/game");
     }
   }
 };
