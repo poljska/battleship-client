@@ -1,7 +1,7 @@
 <template>
   <main>
     <h3>Game ID: {{ gameId }}</h3>
-    <v-row justify="space-arround">
+    <v-row justify="space-around">
       <div class="m-col">
         <h2>Player</h2>
         <grid />
@@ -33,7 +33,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  flex-grow: 10;
+  flex: 10;
 }
 
 h2 {
