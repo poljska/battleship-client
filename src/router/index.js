@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import JoinGame from "@/views/JoinGame.vue";
 import Game from "@/views/Game.vue";
-import PlaceShips from "@/views/PlaceShip.vue";
+import PlaceShips from "@/views/PlaceShips.vue";
 
 Vue.use(VueRouter);
 
