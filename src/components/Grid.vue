@@ -27,17 +27,18 @@
           {{ index }}
         </div>
       </div>
-      <div class="grid">
-        <div v-for="row in grid" :key="row.index" class="line">
-          <div
-            v-for="cell in row.cells"
-            :key="cell.index"
-            class="cell"
-            @click="onClick(row.index, cell.index)"
-          >
-            <div v-if="cell.striked === 'hit'">Hit</div>
-            <div v-else-if="cell.striked === 'missed'">miss</div>
-            <div v-else>?</div>
+      <div class="grid-wrapper">
+        <div class="grid">
+          <div v-for="row in grid" :key="row.index" class="line">
+            <grid-cell
+              v-for="cell in row.cells"
+              :row="row"
+              :col="cell"
+              :boat="cell.boat"
+              :striked="cell.striked"
+              :key="cell.index"
+              @click="onClick"
+            />
           </div>
         </div>
       </div>
@@ -46,11 +47,19 @@
 </template>
 
 <script>
+import GridCell from "@/components/GridCell.vue";
+
 export default {
+  components: {
+    "grid-cell": GridCell
+  },
   data() {
     return {
       grid: []
     };
+  },
+  props: {
+    boats: Array
   },
   created() {
     for (let i = 0; i < 10; i++) {
@@ -74,23 +83,21 @@ export default {
 </script>
 
 <style scoped>
-.cell {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 0.5px dashed #061a40;
-  flex: 1;
-}
-
 .line {
   display: flex;
   flex: 1;
 }
+
+.grid-wrapper {
+  flex: 10;
+}
+
 .grid {
   display: flex;
   flex-direction: column;
   background-color: #0353a4;
-  flex: 10;
+  width: 100%;
+  height: 100%;
 }
 
 .outer-box {
@@ -99,6 +106,7 @@ export default {
   height: 500px;
   width: 500px;
 }
+
 .inner-box {
   display: flex;
   flex: 10;
@@ -107,11 +115,13 @@ export default {
   display: flex;
   flex: 1;
 }
+
 .side-label {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
+
 .label {
   display: flex;
   justify-content: center;
