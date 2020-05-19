@@ -4,12 +4,12 @@
     <v-row justify="space-around">
       <div class="m-col">
         <h2>Player</h2>
-        <grid />
+        <grid :grid="playerGrid" />
       </div>
       <v-divider class="divider" vertical inset />
       <div class="m-col">
         <h2>Opponent</h2>
-        <grid />
+        <grid :grid="enemyGrid" />
       </div>
     </v-row>
   </main>
@@ -22,6 +22,12 @@ export default {
   computed: {
     gameId() {
       return this.$store.state.game.game_id;
+    },
+    playerGrid() {
+      return this.$store.state.playerGrid;
+    },
+    enemyGrid() {
+      return this.$stor.state.enemyGrid;
     }
   },
   components: { Grid }

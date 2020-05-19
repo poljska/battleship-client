@@ -2,7 +2,7 @@
   <main>
     <h3>Game ID: {{ gameId }}</h3>
     <v-row justify="space-around">
-      <grid :boats="ships" @cellClicked="onCellClicked" />
+      <grid :grid="playerGrid" @cellClicked="onCellClicked" />
       <v-radio-group v-model="selectedShip" class="column">
         <div v-for="(ship, index) in ships" :key="index" class="d-flex">
           <v-radio
@@ -39,6 +39,9 @@ export default {
   computed: {
     gameId() {
       return this.$store.state.game.game_id;
+    },
+    playerGrid() {
+      return this.$store.state.playerGrid;
     }
   },
   methods: {

@@ -53,26 +53,8 @@ export default {
   components: {
     "grid-cell": GridCell
   },
-  data() {
-    return {
-      grid: []
-    };
-  },
   props: {
-    boats: Array
-  },
-  created() {
-    for (let i = 0; i < 10; i++) {
-      this.$data.grid.push({ index: i, cells: [] });
-      for (let j = 0; j < 10; j++) {
-        this.$data.grid[i].cells.push({
-          index: j,
-          boat: false,
-          striked: false
-        });
-      }
-    }
-    console.debug(this.$data.grid);
+    grid: Array
   },
   methods: {
     onClick(row, cell) {

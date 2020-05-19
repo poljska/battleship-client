@@ -7,6 +7,8 @@ export default new Vuex.Store({
   state: {
     authToken: "",
     player: "",
+    playerGrid: [],
+    enemyGrid: [],
     game: {}
   },
   mutations: {
@@ -21,6 +23,28 @@ export default new Vuex.Store({
     },
     setGame(state, game) {
       state.game = game;
+    },
+    initGrids(state) {
+      state.playerGrid = [];
+      state.enemyGrid = [];
+
+      for (let i = 0; i < 10; i++) {
+        state.playerGrid.push({ index: i, cells: [] });
+        state.enemyGrid.push({ index: i, cells: [] });
+        for (let j = 0; j < 10; j++) {
+          state.playerGrid[i].cells.push({
+            index: j,
+            boat: false,
+            striked: false
+          });
+          state.enemyGrid[i].cells.push({
+            index: j,
+            boat: false,
+            striked: false
+          });
+          console.debug("i: " + i + " j: " + j);
+        }
+      }
     }
   },
   actions: {
@@ -74,6 +98,7 @@ export default new Vuex.Store({
         ) {
           const game = JSON.parse(request.responseText);
           commit("setGame", game);
+          commit("initGrids");
         }
       });
       request.send();
