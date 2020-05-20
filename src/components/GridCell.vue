@@ -1,8 +1,13 @@
 <template>
   <div class="cell" @click="onClick">
-    <div v-if="striked && boat">Hit {{ boat }}</div>
-    <div v-else-if="striked">miss</div>
-    <div v-else-if="boat" class="mid"></div>
+    <div v-if="boat" class="mid">
+      <div v-if="striked === 'hit'">Hit</div>
+      <div v-else-if="striked === 'miss'">miss</div>
+    </div>
+    <div v-else>
+      <div v-if="striked === 'hit'">Hit</div>
+      <div v-else-if="striked === 'miss'">miss</div>
+    </div>
   </div>
 </template>
 

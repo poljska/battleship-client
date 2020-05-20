@@ -9,9 +9,10 @@
       <v-divider class="divider" vertical inset />
       <div class="m-col">
         <h2>Opponent</h2>
-        <grid :grid="enemyGrid" />
+        <grid :grid="enemyGrid" @clicked="cellSelected" />
       </div>
     </v-row>
+    <v-btn @click="fire">fire</v-btn>
   </main>
 </template>
 
@@ -19,6 +20,11 @@
 import Grid from "@/components/Grid.vue";
 
 export default {
+  data() {
+    return {
+      selectedCell: []
+    };
+  },
   computed: {
     gameId() {
       return this.$store.state.game.game_id;
@@ -27,10 +33,18 @@ export default {
       return this.$store.state.playerGrid;
     },
     enemyGrid() {
-      return this.$stor.state.enemyGrid;
+      return this.$store.state.enemyGrid;
     }
   },
-  components: { Grid }
+  components: { Grid },
+  methods: {
+    fire() {
+      this.$dispatch("fire", this.selectedCell[0], this.selectedCell[1]);
+    },
+    cellSelected(row, col) {
+      this.selectedCell = [row, col];
+    }
+  }
 };
 </script>
 

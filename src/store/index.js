@@ -9,7 +9,8 @@ export default new Vuex.Store({
     player: "",
     playerGrid: [],
     enemyGrid: [],
-    game: {}
+    game: {},
+    allowFire: false
   },
   mutations: {
     setAuthToken(state, authToken) {
@@ -42,9 +43,26 @@ export default new Vuex.Store({
             boat: false,
             striked: false
           });
-          console.debug("i: " + i + " j: " + j);
         }
       }
+    },
+    setPlayerCell({ playerGrid }, row, col, value) {
+      console.debug(value);
+      playerGrid[row].cells[col].boat = value;
+      console.debug(playerGrid[row].cells[col]);
+    },
+    setAllowFire(state, value) {
+      state.allowFire = value;
+    },
+    addEnemyShot({ playerGrid }, shot) {
+      const [row, col] = shot[0];
+      const result = shot[1];
+      playerGrid[row].cells[col].striked = result ? "hit" : "miss";
+    },
+    addShot({ enemyGrid }, shot) {
+      const [row, col] = shot[0];
+      const result = shot[1];
+      enemyGrid[row].cells[col].striked = result ? "hit" : "miss";
     }
   },
   actions: {
@@ -103,7 +121,7 @@ export default new Vuex.Store({
       });
       request.send();
     },
-    fire({ state, commit }, row, col) {
+    fire({ state, commit, dispatch }, row, col) {
       const request = new XMLHttpRequest();
       request.open(
         "PATCH",
@@ -121,13 +139,77 @@ export default new Vuex.Store({
           let { shot, status } = JSON.parse(request.responseText);
           commit("addShot", shot);
           if (status.status === "InProgress") {
-            // Call wait for next turn function
+            commit("setAllowFire", false);
+            dispatch("waitForNextTurn");
           } else if (status.status === "Finished") {
             // Call end Game function
           }
         }
       });
       request.send("[" + row + "," + col + "]");
+    },
+    placeShip({ commit }, odlPosition, newPosition, shipName) {
+      console.debug(shipName);
+      console.debug(odlPosition);
+      if (odlPosition.length > 0) {
+        console.debug("Remove old position");
+        for (let pos in odlPosition) {
+          commit("setPlayerCell", pos[0], pos[1], false);
+          console.debug(pos);
+        }
+      }
+      let cpt = 0;
+      console.debug(newPosition);
+      for (let pos in newPosition) {
+        console.debug(cpt);
+        commit("setPlayerCell", pos[0], pos[1], shipName + "-" + cpt++);
+      }
+    },
+    sendShipsPositions({ state }, ships) {
+      const request = new XMLHttpRequest();
+      request.open(
+        "PATCH",
+        "https://battleship-server-php.herokuapp.com/games/" +
+          state.game.game_id +
+          "/set-ships"
+      );
+      request.setRequestHeader("X-Auth", state.authToken);
+      request.addEventListener("readystatechange", () => {
+        if (
+          request.readyState == XMLHttpRequest.DONE &&
+          request.status == 201
+        ) {
+          /* To do */
+        }
+      });
+      request.send(ships);
+    },
+    waitForNextTurn({ state, commit, dispatch }) {
+      const request = new XMLHttpRequest();
+      request.open(
+        "GET",
+        "https://battleship-server-php.herokuapp.com/games/" +
+          state.game.game_id +
+          "/last-shot"
+      );
+      request.setRequestHeader("X-Auth", state.authToken);
+      request.addEventListener("readystatechange", () => {
+        if (
+          request.readyState == XMLHttpRequest.DONE &&
+          request.status == 200
+        ) {
+          const { last_shot, status } = JSON.parse(request.responseText);
+          if (status.status === "Finished") {
+            console.debug("game finished, winner: " + status.winner);
+          } else if (last_shot.player === state.player) {
+            setTimeout(() => dispatch("waitForNextTurn"), 500);
+          } else {
+            commit("setAllowFire", true);
+            commit("addEnemyShot", last_shot);
+          }
+        }
+      });
+      request.send();
     }
   },
   modules: {}

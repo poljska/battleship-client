@@ -13,6 +13,7 @@
           <v-btn @click="rotateRight(index)">Rotate right</v-btn>
         </div>
       </v-radio-group>
+      <v-btn @click="sendShipsPositions">Confirm</v-btn>
     </v-row>
   </main>
 </template>
@@ -103,12 +104,23 @@ export default {
         cell + (ship.size - 1) * y < 10 &&
         cell + (ship.size - 1) * y >= 0
       ) {
-        ship.positions = [];
+        let newPositions = [];
         for (let i = 0; i < ship.size; i++) {
-          ship.positions.push([row + x * i, cell + y * i]);
+          newPositions.push([row + x * i, cell + y * i]);
         }
-        console.debug(ship.positions);
+        console.log(newPositions);
+        this.$store.dispatch(
+          "placeShip",
+          ship.positions,
+          newPositions,
+          "ship.name"
+        );
+        ship.positions = newPositions;
       }
+    },
+    sendShipsPositions() {
+      this.$store.dispatch("sendShipsPositions", this.ships);
+      this.$router.push("/game");
     }
   }
 };
@@ -122,5 +134,8 @@ h3 {
   font-size: 2vw;
   color: var(--v-primary-base);
   text-align: center;
+}
+.justify-space-around {
+  justify-content: space-around;
 }
 </style>
