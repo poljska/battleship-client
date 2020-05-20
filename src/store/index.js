@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { vueInstance } from "@/main.js";
 
 Vue.use(Vuex);
 
@@ -12,11 +13,11 @@ export default new Vuex.Store({
     game: {},
     allowFire: false,
     ships: {
-      "Plane Carrier": [],
-      Destroyer: [],
-      Submarine: [],
-      Battleship: [],
-      "Patrol Boat": []
+      carrier: [],
+      destroyer: [],
+      submarine: [],
+      battleship: [],
+      patrol_boat: []
     }
   },
   mutations: {
@@ -97,14 +98,20 @@ export default new Vuex.Store({
         "https://battleship-server-php.herokuapp.com/games/" + game_id + "/join"
       );
       request.addEventListener("readystatechange", () => {
-        if (
-          request.readyState == XMLHttpRequest.DONE &&
-          request.status == 200
-        ) {
-          const response = JSON.parse(request.responseText);
-          commit("setPlayer", response["player"]);
-          commit("setAuthToken", response["X-Auth"]);
-          dispatch("getGameInfo");
+        if (request.readyState == XMLHttpRequest.DONE) {
+          let response = "";
+          if (request.responseText) response = JSON.parse(request.responseText);
+          switch (request.status) {
+            case 200:
+              commit("setPlayer", response["player"]);
+              commit("setAuthToken", response["X-Auth"]);
+              dispatch("getGameInfo");
+              vueInstance.$router.push("/place-ships");
+              break;
+            default:
+              console.error("Join request status:" + request.status);
+              console.error(response);
+          }
         }
       });
       request.send();
@@ -130,7 +137,7 @@ export default new Vuex.Store({
       });
       request.send();
     },
-    fire({ state, commit, dispatch }, row, col) {
+    fire({ state }, row, col) {
       const request = new XMLHttpRequest();
       request.open(
         "PATCH",
@@ -145,14 +152,7 @@ export default new Vuex.Store({
           request.readyState == XMLHttpRequest.DONE &&
           request.status == 200
         ) {
-          let { shot, status } = JSON.parse(request.responseText);
-          commit("addShot", shot);
-          if (status.status === "InProgress") {
-            commit("setAllowFire", false);
-            dispatch("waitForNextTurn");
-          } else if (status.status === "Finished") {
-            // Call end Game function
-          }
+          /* */
         }
       });
       request.send("[" + row + "," + col + "]");
@@ -177,7 +177,7 @@ export default new Vuex.Store({
       }
       commit("setShipPosition", { shipName: shipName, position: newPosition });
     },
-    sendShipsPositions({ state }, ships) {
+    sendShipsPositions({ state }) {
       const request = new XMLHttpRequest();
       request.open(
         "PATCH",
@@ -186,17 +186,23 @@ export default new Vuex.Store({
           "/set-ships"
       );
       request.setRequestHeader("X-Auth", state.authToken);
+      request.setRequestHeader("Content-Type", "application/json");
       request.addEventListener("readystatechange", () => {
-        if (
-          request.readyState == XMLHttpRequest.DONE &&
-          request.status == 201
-        ) {
+        if (request.readyState == XMLHttpRequest.DONE) {
+          switch (request.status) {
+            case 200:
+              console.debug("Correct ship placement");
+              vueInstance.$router.push("/waiting");
+              break;
+            default:
+              console.error(request.status);
+          }
           /* To do */
         }
       });
-      request.send(ships);
+      request.send(JSON.stringify(state.ships));
     },
-    waitForNextTurn({ state, commit, dispatch }) {
+    getLastShot({ state, commit }) {
       const request = new XMLHttpRequest();
       request.open(
         "GET",
@@ -210,18 +216,31 @@ export default new Vuex.Store({
           request.readyState == XMLHttpRequest.DONE &&
           request.status == 200
         ) {
-          const { last_shot, status } = JSON.parse(request.responseText);
-          if (status.status === "Finished") {
-            console.debug("game finished, winner: " + status.winner);
-          } else if (last_shot.player === state.player) {
-            setTimeout(() => dispatch("waitForNextTurn"), 500);
-          } else {
-            commit("setAllowFire", true);
+          const { last_shot } = JSON.parse(request.responseText);
+          if (last_shot.player !== state.player)
             commit("addEnemyShot", last_shot);
-          }
         }
       });
       request.send();
+    },
+    runGame({ state, dispatch, commit }) {
+      dispatch("getGameInfo");
+      let isPlayerTurn = state.game.status.turn === state.player;
+      switch (state.game.status.status) {
+        case "New":
+          break;
+        case "InProgress":
+          if (vueInstance.$router.currentRoute.path !== "/game") {
+            vueInstance.$router.push("/game");
+          }
+          if (!state.allowFire && isPlayerTurn) dispatch("getLastShot");
+          if (state.allowFire !== isPlayerTurn)
+            commit("setAllowFire", isPlayerTurn);
+          break;
+        case "Finished":
+          vueInstance.$router.push("/Finished");
+      }
+      setTimeout(() => dispatch("runGame"), 500);
     }
   },
   modules: {}

@@ -6,7 +6,7 @@ import vuetify from "./plugins/vuetify";
 
 Vue.config.productionTip = false;
 
-new Vue({
+const vueInstance = new Vue({
   router,
   store,
   vuetify,
@@ -14,3 +14,5 @@ new Vue({
     return h(App);
   }
 }).$mount("#app");
+
+export { vueInstance };

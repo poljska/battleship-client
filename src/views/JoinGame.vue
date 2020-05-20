@@ -20,7 +20,8 @@ export default {
   },
   methods: {
     onJoin() {
-      console.debug("Join game: " + this.gameId);
+      console.debug("onJoin");
+      this.$store.dispatch("joinGame", this.gameId);
     }
   }
 };
