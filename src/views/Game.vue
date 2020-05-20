@@ -12,7 +12,7 @@
         <grid :grid="enemyGrid" @clicked="cellSelected" />
       </div>
     </v-row>
-    <v-btn @click="fire">fire</v-btn>
+    <v-btn @click="fire" :disabled="!canFire">fire</v-btn>
   </main>
 </template>
 
@@ -34,12 +34,15 @@ export default {
     },
     enemyGrid() {
       return this.$store.state.enemyGrid;
+    },
+    canFire() {
+      return this.$store.allowFire;
     }
   },
   components: { Grid },
   methods: {
     fire() {
-      this.$dispatch("fire", this.selectedCell[0], this.selectedCell[1]);
+      this.$store.dispatch("fire", this.selectedCell[0], this.selectedCell[1]);
     },
     cellSelected(row, col) {
       this.selectedCell = [row, col];
