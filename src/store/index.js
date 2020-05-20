@@ -85,8 +85,8 @@ export default new Vuex.Store({
           request.status == 201
         ) {
           const { game_id } = JSON.parse(request.responseText);
-          commit("setGameId", game_id);
           dispatch("joinGame", game_id);
+          commit("setAllowFire", true);
         }
       });
       request.send(null);
@@ -103,9 +103,11 @@ export default new Vuex.Store({
           if (request.responseText) response = JSON.parse(request.responseText);
           switch (request.status) {
             case 200:
+              commit("setGameId", game_id);
               commit("setPlayer", response["player"]);
               commit("setAuthToken", response["X-Auth"]);
               dispatch("getGameInfo");
+              commit("initGrids");
               vueInstance.$router.push("/place-ships");
               break;
             default:
@@ -132,12 +134,11 @@ export default new Vuex.Store({
         ) {
           const game = JSON.parse(request.responseText);
           commit("setGame", game);
-          commit("initGrids");
         }
       });
       request.send();
     },
-    fire({ state }, row, col) {
+    fire({ state }, [row, col]) {
       const request = new XMLHttpRequest();
       request.open(
         "PATCH",
@@ -152,7 +153,7 @@ export default new Vuex.Store({
           request.readyState == XMLHttpRequest.DONE &&
           request.status == 200
         ) {
-          /* */
+          console.log(request.responseText);
         }
       });
       request.send("[" + row + "," + col + "]");
@@ -193,6 +194,7 @@ export default new Vuex.Store({
             case 200:
               console.debug("Correct ship placement");
               vueInstance.$router.push("/waiting");
+              this.dispatch("runGame");
               break;
             default:
               console.error(request.status);

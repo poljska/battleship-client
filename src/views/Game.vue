@@ -9,9 +9,10 @@
       <v-divider class="divider" vertical inset />
       <div class="m-col">
         <h2>Opponent</h2>
-        <grid :grid="enemyGrid" @clicked="cellSelected" />
+        <grid :grid="enemyGrid" @cellClicked="cellSelected" />
       </div>
     </v-row>
+    <p>Target : {{ selectedCell }}</p>
     <v-btn @click="fire" :disabled="!canFire">fire</v-btn>
   </main>
 </template>
@@ -36,15 +37,16 @@ export default {
       return this.$store.state.enemyGrid;
     },
     canFire() {
-      return this.$store.allowFire;
+      return true;
     }
   },
   components: { Grid },
   methods: {
     fire() {
-      this.$store.dispatch("fire", this.selectedCell[0], this.selectedCell[1]);
+      this.$store.dispatch("fire", this.selectedCell);
     },
     cellSelected(row, col) {
+      console.debug([row, col]);
       this.selectedCell = [row, col];
     }
   }
