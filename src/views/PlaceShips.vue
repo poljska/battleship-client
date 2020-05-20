@@ -79,7 +79,6 @@ export default {
       }
     },
     onCellClicked(row, cell) {
-      console.debug("Cell clicked: ( " + row + ", " + cell + " )");
       const ship = this.ships[this.selectedShip];
       let x = 0;
       let y = 0;
@@ -97,25 +96,20 @@ export default {
           y = -1;
           break;
       }
-
       if (
         row + (ship.size - 1) * x < 10 &&
         row + (ship.size - 1) * x >= 0 &&
         cell + (ship.size - 1) * y < 10 &&
         cell + (ship.size - 1) * y >= 0
       ) {
-        let newPositions = [];
+        ship.positions = [];
         for (let i = 0; i < ship.size; i++) {
-          newPositions.push([row + x * i, cell + y * i]);
+          ship.positions.push([row + x * i, cell + y * i]);
         }
-        console.log(newPositions);
-        this.$store.dispatch(
-          "placeShip",
-          ship.positions,
-          newPositions,
-          "ship.name"
-        );
-        ship.positions = newPositions;
+        this.$store.dispatch("placeShip", {
+          newPosition: ship.positions,
+          shipName: ship.name
+        });
       }
     },
     sendShipsPositions() {

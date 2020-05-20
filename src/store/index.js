@@ -10,7 +10,14 @@ export default new Vuex.Store({
     playerGrid: [],
     enemyGrid: [],
     game: {},
-    allowFire: false
+    allowFire: false,
+    ships: {
+      "Plane Carrier": [],
+      Destroyer: [],
+      Submarine: [],
+      Battleship: [],
+      "Patrol Boat": []
+    }
   },
   mutations: {
     setAuthToken(state, authToken) {
@@ -46,10 +53,8 @@ export default new Vuex.Store({
         }
       }
     },
-    setPlayerCell({ playerGrid }, row, col, value) {
-      console.debug(value);
+    setPlayerCell({ playerGrid }, { row, col, value }) {
       playerGrid[row].cells[col].boat = value;
-      console.debug(playerGrid[row].cells[col]);
     },
     setAllowFire(state, value) {
       state.allowFire = value;
@@ -63,6 +68,10 @@ export default new Vuex.Store({
       const [row, col] = shot[0];
       const result = shot[1];
       enemyGrid[row].cells[col].striked = result ? "hit" : "miss";
+    },
+    setShipPosition(state, { shipName, position }) {
+      state.ships[shipName] = position;
+      console.debug(state.ships[shipName]);
     }
   },
   actions: {
@@ -148,22 +157,25 @@ export default new Vuex.Store({
       });
       request.send("[" + row + "," + col + "]");
     },
-    placeShip({ commit }, odlPosition, newPosition, shipName) {
-      console.debug(shipName);
-      console.debug(odlPosition);
-      if (odlPosition.length > 0) {
+    placeShip({ state, commit }, { newPosition, shipName }) {
+      if (state.ships[shipName]) {
         console.debug("Remove old position");
-        for (let pos in odlPosition) {
-          commit("setPlayerCell", pos[0], pos[1], false);
-          console.debug(pos);
+        console.debug(state.ships[shipName]);
+        for (let cpt = 0; cpt < state.ships[shipName].length; cpt++) {
+          const [row, col] = state.ships[shipName][cpt];
+          console.debug([row, col]);
+          commit("setPlayerCell", { row: row, col: col, value: false });
         }
       }
-      let cpt = 0;
-      console.debug(newPosition);
-      for (let pos in newPosition) {
-        console.debug(cpt);
-        commit("setPlayerCell", pos[0], pos[1], shipName + "-" + cpt++);
+      for (let cpt = 0; cpt < newPosition.length; cpt++) {
+        const [row, col] = newPosition[cpt];
+        commit("setPlayerCell", {
+          row: row,
+          col: col,
+          value: shipName + "-" + cpt
+        });
       }
+      commit("setShipPosition", { shipName: shipName, position: newPosition });
     },
     sendShipsPositions({ state }, ships) {
       const request = new XMLHttpRequest();
