@@ -25,11 +25,11 @@ export default {
   data() {
     return {
       ships: [
-        { name: "Plane Carrier", size: 5, positions: [], orientation: "north" },
-        { name: "Destroyer", size: 3, positions: [], orientation: "north" },
-        { name: "Submarine", size: 3, positions: [], orientation: "north" },
-        { name: "Battleship", size: 4, positions: [], orientation: "north" },
-        { name: "Patrol Boat", size: 2, positions: [], orientation: "north" }
+        { name: "carrier", size: 5, positions: [], orientation: "north" },
+        { name: "destroyer", size: 3, positions: [], orientation: "north" },
+        { name: "submarine", size: 3, positions: [], orientation: "north" },
+        { name: "battleship", size: 4, positions: [], orientation: "north" },
+        { name: "patrol_boat", size: 2, positions: [], orientation: "north" }
       ],
       selectedShip: 0
     };
@@ -114,7 +114,6 @@ export default {
     },
     sendShipsPositions() {
       this.$store.dispatch("sendShipsPositions", this.ships);
-      this.$router.push("/game");
     }
   }
 };
