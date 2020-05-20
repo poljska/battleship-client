@@ -1,8 +1,8 @@
 <template>
   <div class="cell" @click="onClick">
-    <div v-if="striked && boat">Hit</div>
+    <div v-if="striked && boat">Hit {{ boat }}</div>
     <div v-else-if="striked">miss</div>
-    <div v-else>?</div>
+    <div v-else-if="boat" class="mid"></div>
   </div>
 </template>
 
@@ -20,9 +20,14 @@ export default {
 <style scoped>
 .cell {
   display: flex;
-  justify-content: center;
-  align-items: center;
   border: 0.5px dashed #061a40;
+  flex: 1;
+}
+
+.mid {
+  display: block;
+  background-image: url("../assets/ship-mid.png");
+  background-size: cover;
   flex: 1;
 }
 </style>

@@ -32,12 +32,12 @@
           <div v-for="row in grid" :key="row.index" class="line">
             <grid-cell
               v-for="cell in row.cells"
-              :row="row"
-              :col="cell"
+              :row="row.index"
+              :col="cell.index"
               :boat="cell.boat"
               :striked="cell.striked"
               :key="cell.index"
-              @click="onClick"
+              @clicked="onClick"
             />
           </div>
         </div>
