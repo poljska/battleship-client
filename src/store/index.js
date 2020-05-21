@@ -163,7 +163,7 @@ export default new Vuex.Store({
       });
       request.send("[" + (row + 1) + "," + (col + 1) + "]");
     },
-    placeShip({ state, commit }, { newPosition, shipName }) {
+    placeShip({ state, commit }, { newPosition, shipName, orientation }) {
       if (state.ships[shipName]) {
         console.debug("Remove old position");
         console.debug(state.ships[shipName]);
@@ -178,7 +178,7 @@ export default new Vuex.Store({
         commit("setPlayerCell", {
           row: row,
           col: col,
-          value: shipName + "-" + cpt
+          value: shipName + "-" + cpt + "-" + orientation
         });
       }
       commit("setShipPosition", { shipName: shipName, position: newPosition });

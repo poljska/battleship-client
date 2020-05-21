@@ -1,18 +1,82 @@
 <template>
-  <div class="cell" @click="onClick">
-    <div v-if="boat" class="mid">
-      <div class="hit" v-if="striked === 'hit'"></div>
-      <div class="miss" v-else-if="striked === 'miss'"></div>
-    </div>
-    <div class="empty" v-else>
-      <div class="hit" v-if="striked === 'hit'"></div>
-      <div class="miss" v-else-if="striked === 'miss'"></div>
-    </div>
-  </div>
+  <div class="cell" :style="style" @click="onClick"></div>
 </template>
 
 <script>
 export default {
+  computed: {
+    style() {
+      let style = "";
+      let image = [];
+      if (this.$props.boat) {
+        let [boatName, index, orientation] = this.$props.boat.split("-");
+        let offset = 0;
+        console.debug([boatName, index, orientation]);
+        switch (boatName) {
+          case "carrier":
+            if (index == 0) {
+              image.push("ship-back.png");
+              offset = 180;
+            } else if (index == 4) {
+              image.push("ship-back.png");
+            } else {
+              image.push("ship-mid.png");
+            }
+            break;
+          case "battleship":
+            if (index == 0) {
+              image.push("ship-front.png");
+            } else if (index == 3) {
+              image.push("ship-back.png");
+            } else {
+              image.push("ship-mid.png");
+            }
+            break;
+          case "submarine":
+          case "destroyer":
+            if (index == 0) {
+              image.push("ship-front.png");
+            } else if (index == 2) {
+              image.push("ship-back.png");
+            } else {
+              image.push("ship-mid.png");
+            }
+            break;
+          case "patrol_boat":
+            if (index == 0) {
+              image.push("ship-front.png");
+            } else if (index == 1) {
+              image.push("ship-back.png");
+            }
+            break;
+        }
+        switch (orientation) {
+          case "north":
+            style += "transform: rotate(" + (0 + offset) + "deg);";
+            break;
+          case "est":
+            style += "transform: rotate(" + (90 + offset) + "deg);";
+            break;
+          case "south":
+            style += "transform: rotate(" + (180 + offset) + "deg);";
+            break;
+          case "west":
+            style += "transform: rotate(" + (270 + offset) + "deg);";
+            break;
+        }
+      }
+      if (this.$props.stricked === "hit") {
+        image.push("hit.png");
+      } else if (this.$props.stricked === "miss") {
+        image.push("miss.png");
+      }
+
+      for (let img in image) {
+        style += 'background-image: url("../assets/' + image[img] + '/");';
+      }
+      return style;
+    }
+  },
   props: ["row", "col", "boat", "striked"],
   methods: {
     onClick() {
@@ -26,30 +90,6 @@ export default {
 .cell {
   display: flex;
   border: 0.5px dashed #061a40;
-  flex: 1;
-}
-.empty {
-  display: flex;
-  flex: 1;
-}
-
-.mid {
-  display: flex;
-  background-image: url("../assets/ship-mid.png");
-  background-size: cover;
-  flex: 1;
-}
-
-.hit {
-  display: block;
-  background-image: url("../assets/hit.png");
-  background-size: cover;
-  flex: 1;
-}
-
-.miss {
-  display: block;
-  background-image: url("../assets/miss.png");
   background-size: cover;
   flex: 1;
 }

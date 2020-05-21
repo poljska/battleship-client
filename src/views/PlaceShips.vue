@@ -108,7 +108,8 @@ export default {
         }
         this.$store.dispatch("placeShip", {
           newPosition: ship.positions,
-          shipName: ship.name
+          shipName: ship.name,
+          orientation: ship.orientation
         });
       }
     },
