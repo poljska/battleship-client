@@ -7,7 +7,7 @@ export default {
   computed: {
     style() {
       let style = "";
-      let image = [];
+      let boatImage = "";
       if (this.$props.boat) {
         let [boatName, index, orientation] = this.$props.boat.split("-");
         let offset = 0;
@@ -15,38 +15,38 @@ export default {
         switch (boatName) {
           case "carrier":
             if (index == 0) {
-              image.push("ship-back.png");
+              boatImage = "ship-back.png";
               offset = 180;
             } else if (index == 4) {
-              image.push("ship-back.png");
+              boatImage = "ship-back.png";
             } else {
-              image.push("ship-mid.png");
+              boatImage = "ship-mid.png";
             }
             break;
           case "battleship":
             if (index == 0) {
-              image.push("ship-front.png");
+              boatImage = "ship-front.png";
             } else if (index == 3) {
-              image.push("ship-back.png");
+              boatImage = "ship-back.png";
             } else {
-              image.push("ship-mid.png");
+              boatImage = "ship-mid.png";
             }
             break;
           case "submarine":
           case "destroyer":
             if (index == 0) {
-              image.push("ship-front.png");
+              boatImage = "ship-front.png";
             } else if (index == 2) {
-              image.push("ship-back.png");
+              boatImage = "ship-back.png";
             } else {
-              image.push("ship-mid.png");
+              boatImage = "ship-mid.png";
             }
             break;
           case "patrol_boat":
             if (index == 0) {
-              image.push("ship-front.png");
+              boatImage = "ship-front.png";
             } else if (index == 1) {
-              image.push("ship-back.png");
+              boatImage = "ship-back.png";
             }
             break;
         }
@@ -65,15 +65,19 @@ export default {
             break;
         }
       }
-      if (this.$props.stricked === "hit") {
-        image.push("hit.png");
-      } else if (this.$props.stricked === "miss") {
-        image.push("miss.png");
+      let hitImage = "";
+      if (this.$props.striked === "hit") {
+        hitImage = "hit.png";
+      } else if (this.$props.striked === "miss") {
+        hitImage = "miss.png";
       }
 
-      for (let img in image) {
-        style += 'background-image: url("../assets/' + image[img] + '/");';
-      }
+      style +=
+        'background-image: url("../assets/' +
+        hitImage +
+        '"), url("../assets/' +
+        boatImage +
+        '");';
       return style;
     }
   },
