@@ -14,7 +14,8 @@
       <div class="m-col m-col-1">
         <v-card class="fire-control" dark color="#061a40">
           <v-card-title>
-            Target : {{ selectedCell.row }} - {{ selectedCell.col | toLetter }}
+            Target : {{ selectedCell.col | toLetter }} -
+            {{ selectedCell.row | plusOne }}
           </v-card-title>
           <v-btn tile color="#ba1313" dark @click="fire" :disabled="!canFire">
             fire
@@ -31,7 +32,7 @@ import Grid from "@/components/Grid.vue";
 export default {
   data() {
     return {
-      selectedCell: {}
+      selectedCell: { row: 0, col: 0 }
     };
   },
   computed: {
@@ -60,6 +61,9 @@ export default {
   filters: {
     toLetter(value) {
       return String.fromCharCode(65 + value);
+    },
+    plusOne(value) {
+      return value + 1;
     }
   }
 };

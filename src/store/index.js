@@ -55,7 +55,7 @@ export default new Vuex.Store({
       }
     },
     setPlayerCell({ playerGrid }, { row, col, value }) {
-      playerGrid[row].cells[col].boat = value;
+      playerGrid[row - 1].cells[col - 1].boat = value;
     },
     setAllowFire(state, value) {
       state.allowFire = value;
@@ -64,12 +64,14 @@ export default new Vuex.Store({
       console.debug(shot);
       const [row, col] = shot[0];
       const result = shot[1];
-      state.playerGrid[row].cells[col].striked = result ? "hit" : "miss";
+      state.playerGrid[row - 1].cells[col - 1].striked = result
+        ? "hit"
+        : "miss";
     },
     addShot({ enemyGrid }, shot) {
       const [row, col] = shot[0];
       const result = shot[1];
-      enemyGrid[row].cells[col].striked = result ? "hit" : "miss";
+      enemyGrid[row - 1].cells[col - 1].striked = result ? "hit" : "miss";
     },
     setShipPosition(state, { shipName, position }) {
       state.ships[shipName] = position;
@@ -159,7 +161,7 @@ export default new Vuex.Store({
           commit("addShot", response.shot);
         }
       });
-      request.send("[" + row + "," + col + "]");
+      request.send("[" + (row + 1) + "," + (col + 1) + "]");
     },
     placeShip({ state, commit }, { newPosition, shipName }) {
       if (state.ships[shipName]) {

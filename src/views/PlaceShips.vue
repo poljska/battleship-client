@@ -104,7 +104,7 @@ export default {
       ) {
         ship.positions = [];
         for (let i = 0; i < ship.size; i++) {
-          ship.positions.push([row + x * i, cell + y * i]);
+          ship.positions.push([row + x * i + 1, cell + y * i + 1]);
         }
         this.$store.dispatch("placeShip", {
           newPosition: ship.positions,
