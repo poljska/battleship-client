@@ -11,7 +11,6 @@ export default {
       if (this.$props.boat) {
         let [boatName, index, orientation] = this.$props.boat.split("-");
         let offset = 0;
-        console.debug([boatName, index, orientation]);
         switch (boatName) {
           case "carrier":
             if (index == 0) {

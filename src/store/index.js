@@ -61,7 +61,6 @@ export default new Vuex.Store({
       state.allowFire = value;
     },
     addEnemyShot(state, shot) {
-      console.debug(shot);
       const [row, col] = shot[0];
       const result = shot[1];
       state.playerGrid[row - 1].cells[col - 1].striked = result
@@ -75,7 +74,6 @@ export default new Vuex.Store({
     },
     setShipPosition(state, { shipName, position }) {
       state.ships[shipName] = position;
-      console.debug(state.ships[shipName]);
     }
   },
   actions: {
@@ -165,11 +163,8 @@ export default new Vuex.Store({
     },
     placeShip({ state, commit }, { newPosition, shipName, orientation }) {
       if (state.ships[shipName]) {
-        console.debug("Remove old position");
-        console.debug(state.ships[shipName]);
         for (let cpt = 0; cpt < state.ships[shipName].length; cpt++) {
           const [row, col] = state.ships[shipName][cpt];
-          console.debug([row, col]);
           commit("setPlayerCell", { row: row, col: col, value: false });
         }
       }
@@ -197,7 +192,6 @@ export default new Vuex.Store({
         if (request.readyState == XMLHttpRequest.DONE) {
           switch (request.status) {
             case 200:
-              console.debug("Correct ship placement");
               vueInstance.$router.push("/waiting");
               this.dispatch("runGame");
               break;
@@ -224,7 +218,6 @@ export default new Vuex.Store({
           request.status == 200
         ) {
           const response = JSON.parse(request.responseText);
-          console.debug(response);
           commit("addEnemyShot", response.last_shot.shot);
         }
       });
@@ -242,7 +235,6 @@ export default new Vuex.Store({
             vueInstance.$router.push("/game");
           }
           if (!state.allowFire && isPlayerTurn) {
-            console.debug("Call getLastShot");
             dispatch("getLastShot");
           }
           if (state.allowFire !== isPlayerTurn)

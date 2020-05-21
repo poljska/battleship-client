@@ -102,15 +102,31 @@ export default {
         cell + (ship.size - 1) * y < 10 &&
         cell + (ship.size - 1) * y >= 0
       ) {
-        ship.positions = [];
-        for (let i = 0; i < ship.size; i++) {
-          ship.positions.push([row + x * i + 1, cell + y * i + 1]);
+        let colision = false;
+        for (let shipC in this.ships) {
+          if (this.ships[shipC].name !== ship.name) {
+            const postionsC = this.ships[shipC].positions;
+            for (let index in postionsC) {
+              const pos = postionsC[index];
+              for (let i = 0; i < ship.size; i++) {
+                colision =
+                  colision ||
+                  (row + x * i + 1 == pos[0] && cell + y * i + 1 == pos[1]);
+              }
+            }
+          }
         }
-        this.$store.dispatch("placeShip", {
-          newPosition: ship.positions,
-          shipName: ship.name,
-          orientation: ship.orientation
-        });
+        if (!colision) {
+          ship.positions = [];
+          for (let i = 0; i < ship.size; i++) {
+            ship.positions.push([row + x * i + 1, cell + y * i + 1]);
+          }
+          this.$store.dispatch("placeShip", {
+            newPosition: ship.positions,
+            shipName: ship.name,
+            orientation: ship.orientation
+          });
+        }
       }
     },
     sendShipsPositions() {
