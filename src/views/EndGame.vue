@@ -2,7 +2,7 @@
   <main>
     <h1 v-if="isWinner">You Won !</h1>
     <h1 v-else>You losed ...</h1>
-    <v-btn color="#061a40" dark link="/">Home</v-btn>
+    <v-btn color="#061a40" dark @click="onClick">Home</v-btn>
   </main>
 </template>
 
