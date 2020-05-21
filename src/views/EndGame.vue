@@ -29,6 +29,6 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex: 8;
+  flex: 6;
 }
 </style>

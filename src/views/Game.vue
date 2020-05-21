@@ -74,7 +74,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  flex: 10;
+  flex: 6;
 }
 
 h2 {

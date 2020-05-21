@@ -13,6 +13,6 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 8;
+  flex: 6;
 }
 </style>

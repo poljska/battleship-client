@@ -138,7 +138,7 @@ export default {
 
 <style scoped>
 main {
-  flex: 10;
+  flex: 6;
 }
 h3 {
   font-size: 2vw;

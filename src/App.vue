@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header>
+    <header class="header">
       <h1>BATTLESHIP</h1>
     </header>
     <router-view />
@@ -19,8 +19,9 @@
   color: #061a40;
 }
 
-header {
+.header {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-content: center;
   flex: 2;
@@ -28,12 +29,11 @@ header {
 }
 
 h1 {
-  font-size: 10vh;
+  font-size: 15vh;
   text-align: center;
   font-family: Helvetica, sans-serif;
   color: #061a40;
   flex: 0;
-  margin: 4%;
 }
 /* HEX 
   $color1: #b9d6f2ff;
