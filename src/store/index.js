@@ -60,10 +60,11 @@ export default new Vuex.Store({
     setAllowFire(state, value) {
       state.allowFire = value;
     },
-    addEnemyShot({ playerGrid }, shot) {
+    addEnemyShot(state, shot) {
+      console.debug(shot);
       const [row, col] = shot[0];
       const result = shot[1];
-      playerGrid[row].cells[col].striked = result ? "hit" : "miss";
+      state.playerGrid[row].cells[col].striked = result ? "hit" : "miss";
     },
     addShot({ enemyGrid }, shot) {
       const [row, col] = shot[0];
@@ -138,7 +139,7 @@ export default new Vuex.Store({
       });
       request.send();
     },
-    fire({ state }, [row, col]) {
+    fire({ state, commit }, { row, col }) {
       const request = new XMLHttpRequest();
       request.open(
         "PATCH",
@@ -154,6 +155,8 @@ export default new Vuex.Store({
           request.status == 200
         ) {
           console.log(request.responseText);
+          const response = JSON.parse(request.responseText);
+          commit("addShot", response.shot);
         }
       });
       request.send("[" + row + "," + col + "]");
@@ -218,9 +221,9 @@ export default new Vuex.Store({
           request.readyState == XMLHttpRequest.DONE &&
           request.status == 200
         ) {
-          const { last_shot } = JSON.parse(request.responseText);
-          if (last_shot.player !== state.player)
-            commit("addEnemyShot", last_shot);
+          const response = JSON.parse(request.responseText);
+          console.debug(response);
+          commit("addEnemyShot", response.last_shot.shot);
         }
       });
       request.send();
@@ -235,7 +238,10 @@ export default new Vuex.Store({
           if (vueInstance.$router.currentRoute.path !== "/game") {
             vueInstance.$router.push("/game");
           }
-          if (!state.allowFire && isPlayerTurn) dispatch("getLastShot");
+          if (!state.allowFire && isPlayerTurn) {
+            console.debug("Call getLastShot");
+            dispatch("getLastShot");
+          }
           if (state.allowFire !== isPlayerTurn)
             commit("setAllowFire", isPlayerTurn);
           break;

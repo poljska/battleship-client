@@ -2,18 +2,26 @@
   <main>
     <h3>Game ID: {{ gameId }}</h3>
     <v-row justify="space-around">
-      <div class="m-col">
+      <div class="m-col m-col-2">
         <h2>Player</h2>
         <grid :grid="playerGrid" />
       </div>
       <v-divider class="divider" vertical inset />
-      <div class="m-col">
+      <div class="m-col m-col-2">
         <h2>Opponent</h2>
         <grid :grid="enemyGrid" @cellClicked="cellSelected" />
       </div>
+      <div class="m-col m-col-1">
+        <v-card class="fire-control" dark color="#061a40">
+          <v-card-title>
+            Target : {{ selectedCell.row }} - {{ selectedCell.col | toLetter }}
+          </v-card-title>
+          <v-btn tile color="#ba1313" dark @click="fire" :disabled="!canFire">
+            fire
+          </v-btn>
+        </v-card>
+      </div>
     </v-row>
-    <p>Target : {{ selectedCell }}</p>
-    <v-btn @click="fire" :disabled="!canFire">fire</v-btn>
   </main>
 </template>
 
@@ -23,7 +31,7 @@ import Grid from "@/components/Grid.vue";
 export default {
   data() {
     return {
-      selectedCell: []
+      selectedCell: {}
     };
   },
   computed: {
@@ -37,7 +45,7 @@ export default {
       return this.$store.state.enemyGrid;
     },
     canFire() {
-      return true;
+      return this.$store.state.allowFire;
     }
   },
   components: { Grid },
@@ -46,8 +54,12 @@ export default {
       this.$store.dispatch("fire", this.selectedCell);
     },
     cellSelected(row, col) {
-      console.debug([row, col]);
-      this.selectedCell = [row, col];
+      this.selectedCell = { row: row, col: col };
+    }
+  },
+  filters: {
+    toLetter(value) {
+      return String.fromCharCode(65 + value);
     }
   }
 };
@@ -76,6 +88,20 @@ h3 {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.m-col-1 {
   flex: 1;
+}
+.m-col-2 {
+  flex: 2;
+}
+.fire-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 30vh;
+  width: 30vh;
 }
 </style>

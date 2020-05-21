@@ -85,8 +85,8 @@ export default {
 .outer-box {
   display: flex;
   flex-direction: column;
-  height: 500px;
-  width: 500px;
+  height: 50vh;
+  width: 50vh;
 }
 
 .inner-box {
