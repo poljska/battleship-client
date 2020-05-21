@@ -233,6 +233,7 @@ export default new Vuex.Store({
       let isPlayerTurn = state.game.status.turn === state.player;
       switch (state.game.status.status) {
         case "New":
+          setTimeout(() => dispatch("runGame"), 500);
           break;
         case "InProgress":
           if (vueInstance.$router.currentRoute.path !== "/game") {
@@ -244,11 +245,11 @@ export default new Vuex.Store({
           }
           if (state.allowFire !== isPlayerTurn)
             commit("setAllowFire", isPlayerTurn);
+          setTimeout(() => dispatch("runGame"), 500);
           break;
         case "Finished":
-          vueInstance.$router.push("/Finished");
+          vueInstance.$router.push("/end-game");
       }
-      setTimeout(() => dispatch("runGame"), 500);
     }
   },
   modules: {}
