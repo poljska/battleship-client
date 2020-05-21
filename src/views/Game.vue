@@ -78,7 +78,7 @@ main {
 }
 
 h2 {
-  font-size: 3em;
+  font-size: 5vh;
   color: #061a40;
 }
 
