@@ -1,9 +1,18 @@
 <template>
-  <div>
+  <main>
     <h2>Waiting for Other player</h2>
-  </div>
+  </main>
 </template>
 
 <script>
 export default {};
 </script>
+
+<style scoped>
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 8;
+}
+</style>
