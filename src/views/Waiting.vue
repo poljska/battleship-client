@@ -1,6 +1,6 @@
 <template>
   <main>
-    <h2>Waiting for Other player</h2>
+    <h2>Waiting for Other player ...</h2>
   </main>
 </template>
 
