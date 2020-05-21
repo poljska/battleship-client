@@ -28,7 +28,7 @@ header {
 }
 
 h1 {
-  font-size: 10em;
+  font-size: 10vh;
   text-align: center;
   font-family: Helvetica, sans-serif;
   color: #061a40;
